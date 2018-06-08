@@ -7,14 +7,33 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
+<!-- you can also do this annotation based in java 
+http://www.baeldung.com/the-persistence-layer-with-spring-and-jpa
+ -->
+ 
 <!--  tells  spring that we are supporting annotation based. Scan the project to create beans -->
 <context:annotation-config />
 
-<!-- Tells spring to use persistence processor. -->
+<!-- Tells spring to use persistence context annotation. -->
 <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"></bean>
 
 <bean id= "entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 	<property name="persistenceUnitName" value="punit" />
 	<property name="dataSource" ref ="dataSource" />
+	<property name="jpaVendorAdapter">
+		<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"> <!-- Jpa vendor, there are different vendors available too -->
+			<property name="showSql" value="true" />
+		</bean>
+	</property>
+	
+	<!-- Properties of Hibernate vendor -->
+	<property name="jpaPropertyMap">
+		<map>
+			<!-- https://stackoverflow.com/questions/21012799/why-do-i-need-to-configure-the-sql-dialect-of-a-data-source -->
+			<entry key="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+			<entry key="hibernate.hbm2ddl.auto" value="none" />
+			<entry key="hibernate.format_sql" value="true" /> 
+		</map>				
+	</property>
 </bean>
 </beans>
