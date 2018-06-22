@@ -31,9 +31,25 @@ http://www.baeldung.com/the-persistence-layer-with-spring-and-jpa
 		<map>
 			<!-- https://stackoverflow.com/questions/21012799/why-do-i-need-to-configure-the-sql-dialect-of-a-data-source -->
 			<entry key="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
-			<entry key="hibernate.hbm2ddl.auto" value="none" />
+			<entry key="hibernate.hbm2ddl.auto" value="create" />
 			<entry key="hibernate.format_sql" value="true" /> 
 		</map>				
 	</property>
+</bean>
+
+<!-- Transaction around entity manager factory -->
+<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" >
+	<property name="entityManagerFactory" ref="entityManagerFactory" />
+</bean>
+
+<!-- Configure the transaction. COnfigure the transaction using annotation. Start develping code using transaction -->
+<tx:annotation-driven transaction-manager="transactionManager"/>
+
+<!-- Connection pool and JNDI can be added -->
+<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+	<property name="url" value="jdbc:mysql://localhost:" />
+	<property name="username" value="" />
+	<property name="password" value="" />
 </bean>
 </beans>
